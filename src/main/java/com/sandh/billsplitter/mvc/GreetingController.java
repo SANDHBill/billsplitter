@@ -4,12 +4,12 @@ package com.sandh.billsplitter.mvc;
  * Created by hamed on 18/09/2015.
  */
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import com.sandh.billsplitter.domain.Greeting;
 import org.springframework.web.bind.annotation.RequestMapping;
-        import org.springframework.web.bind.annotation.RequestParam;
-        import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class GreetingController {
