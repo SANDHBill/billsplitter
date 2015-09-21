@@ -35,7 +35,7 @@ public class BillController {
         if(operation.equals("add") && !foodName.equals(""))
             bill_.addItem(foodName,Double.parseDouble(price));
         if(operation.equals("claim") && !foodName.equals("") && !personName.equals("")) {
-            //TODO: Should be filled
+            //TODO: Should be filled1
             UUID foodId = null;
             billUtility.claimItem(bill_, foodId, personName);
         }
