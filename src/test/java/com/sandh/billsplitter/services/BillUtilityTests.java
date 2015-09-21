@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import java.util.Map;
 
-public class BillUtilityTest {
+public class BillUtilityTests {
     public static final String SHOULD_PAY = " should pay ";
     private final BillTestScenario billTestScenario = new BillTestScenario();
     private BillUtility billUtility = new BillUtility();

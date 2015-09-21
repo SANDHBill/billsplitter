@@ -7,7 +7,7 @@ package com.sandh.billsplitter.domain;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ItemTest {
+public class ItemTests {
 
     public static final String KALAMARY = "kalamary";
     public static final double ITEMPRICE = -5;
