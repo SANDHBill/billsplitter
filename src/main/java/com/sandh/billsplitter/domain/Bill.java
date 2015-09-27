@@ -13,6 +13,11 @@ public class Bill {
     private List<Item> items  = new ArrayList<Item>();
     final static Logger log = LoggerFactory.getLogger(Bill.class);
 
+    public UUID getId() {
+        return id;
+    }
+    private UUID id = UUID.randomUUID();
+
     public void addItem(Item item)
     {
         items.add(item);
