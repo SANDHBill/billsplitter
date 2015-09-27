@@ -1,5 +1,6 @@
 package com.sandh.billsplitter.mvc;
 
+import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,7 +57,7 @@ public class BillControllerTests {
         mockMvc.perform(put(new URI("/bill/create/")))
                .andExpect(status().isOk());
     }
-
+    
     @Test
     public void addFoodToBill() throws Exception {
         MvcResult result = mockMvc.perform(put(new URI("/bill/create/"))).andReturn();
@@ -64,5 +65,20 @@ public class BillControllerTests {
         mockMvc.perform(put(new URI("/bill/add/?food=ghormeh&price=11.0&billId="+content)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..items[0].price", is(11.0)));
+    }
+    @Test
+    public void claimFoodBill() throws Exception {
+        MvcResult result = mockMvc.perform(put(new URI("/bill/create/"))).andReturn();
+        String billId = result.getResponse().getContentAsString();
+        result = mockMvc.perform(put(new URI("/bill/add/?food=ghormeh&price=11.0&billId="+billId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..items[0].price", is(11.0)))
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        String foodId = JsonPath.read(content, "$..items[0].id");
+        String claimerName = "Shahram";
+        mockMvc.perform(put(new URI("/bill/claim/?foodId="+foodId+"&name="+claimerName+"&billId="+billId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..items[0].owners[0]", is(claimerName)));
     }
 }
