@@ -67,5 +67,22 @@ public class BillController {
         return new ResponseEntity<Bill>(bill,HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/bill/disclaim/", method = RequestMethod.PUT)
+    public ResponseEntity<Bill> disclaimFood(
+            @RequestParam(value="foodId") String foodId,
+            @RequestParam(value="name") String claimerName,
+            @RequestParam(value="billId") String billId
+    )
+    {
+        //http://localhost:8080/billsplitter/bill/claim/?foodId=??&name=Shahram&billId=???
+        if(null == foodId || null == claimerName || null == billId)
+            return new ResponseEntity<Bill>(HttpStatus.BAD_REQUEST);
+        Bill bill = billsCache.get(UUID.fromString(billId));
+        if(null == bill)
+            return new ResponseEntity<Bill>(HttpStatus.BAD_REQUEST);
+        billUtility.disclaimItem(bill,UUID.fromString(foodId), claimerName);
+        return new ResponseEntity<Bill>(bill,HttpStatus.OK);
+    }
+
 
 }
