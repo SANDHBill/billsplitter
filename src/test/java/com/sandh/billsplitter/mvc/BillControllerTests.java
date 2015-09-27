@@ -108,4 +108,32 @@ public class BillControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..items[0].owners[0]", is(claimerName2)));
     }
+
+    @Test
+    public void sharedBill() throws Exception {
+        MvcResult result = mockMvc.perform(put(new URI("/bill/create/"))).andReturn();
+        String billId = result.getResponse().getContentAsString();
+        result = mockMvc.perform(put(new URI("/bill/add/?food=ghormeh&price=11.0&billId="+billId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..items[0].price", is(11.0)))
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        String foodId = JsonPath.read(content, "$..items[0].id");
+        String claimerName = "Shahram";
+
+        mockMvc.perform(put(new URI("/bill/claim/?foodId="+foodId+"&name="+claimerName+"&billId="+billId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..items[0].owners[0]", is(claimerName)));
+
+        String claimerName2 = "Hamed";
+        mockMvc.perform(put(new URI("/bill/claim/?foodId="+foodId+"&name="+claimerName2+"&billId="+billId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$..items[0].owners[1]", is(claimerName2)));
+
+        mockMvc.perform(get(new URI("/bill/shares/?billId="+billId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.Not owned", is(0.0)))
+                .andExpect(jsonPath("$.Hamed", is(5.5)))
+                .andExpect(jsonPath("$.Shahram", is(5.5)));
+    }
 }

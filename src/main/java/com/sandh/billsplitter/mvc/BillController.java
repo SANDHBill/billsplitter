@@ -84,5 +84,17 @@ public class BillController {
         return new ResponseEntity<Bill>(bill,HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/bill/shares/", method = RequestMethod.GET)
+    public ResponseEntity<Map> getAllShares(
+            @RequestParam(value="billId") String billId
+    )
+    {
+        //http://localhost:8080/billsplitter/bill/shares/?billId=???
+        Bill bill = billsCache.get(UUID.fromString(billId));
+        if(null == bill)
+            return new ResponseEntity<Map>(HttpStatus.BAD_REQUEST);
+        Map participants = billUtility.calculateTotalPerPerson(bill);
+        return new ResponseEntity<Map>(participants,HttpStatus.OK);
+    }
 
 }
